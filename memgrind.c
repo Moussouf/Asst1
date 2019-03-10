@@ -1,16 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "mymalloc.h"
-#include <stddef.h>
 #include <time.h>
+#include <sys/time.h>
+#include <stddef.h>
+#include "mymalloc.h>
 
+int i;
 
-int timeOFA;
-int timeOFB;
-int timeOFC;
-int timeOFD;
-int timeOFE;
-int timeOFF;
+float start;
+float end;
+//float time;
 
 void workloadA();
 void workloadB();
@@ -19,33 +18,96 @@ void workloadD();
 void workloadE();
 void workloadF();
 
-int main ()
+int main(int argc, char* argv[])
 {
-  srand(time(0));
-  printf("executing work loads\n");
-  workloadA();
-  printf("End of work load A\n");
-  workloadB();
-  printf("End of work load B\n");
-  workloadC();
-  printf("End of work load C\n");
-  workloadD();
-  printf("End of work load D\n");
- /* workloadE();
-  printf("End of work load E\n");
-  //workloadF();
-  printf("End of work load F\n");*/
+
+unsigned int timeA = 0;
+unsigned int timeB = 0;
+unsigned int timeC = 0;
+unsigned int timeD = 0;
+unsigned int timeE = 0;
+unsigned int timeF = 0;
+
+//Used for system times in clock ticks or CLOCKS_PER_SEC
+/*clock_t startA;
+clock_t endA;
+*/
+
+struct timeval start;
+struct timeval end;
+struct timeval time;
+
+gettimeofday(&time, NULL);
+
+//For time in microseconds
+
+suseconds_t systime = time.tv_usec;
+
+
+for(i = 0; i < 100; i++)
+{
+	//Perform WorkloadA
+	gettimeofday(&start, NULL);
+	WorkloadA();
+	gettimeofday(&end, NULL);
+	timeA += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+
+	//Perform WorkloadB
+	gettimeofday(&start, NULL);
+	WorkloadB();
+	gettimeofday(&end, NULL);
+	timeB += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+
+	//Perform WorkloadC
+	gettimeofday(&start, NULL);
+	WorkloadC();
+	gettimeofday(&end, NULL);
+	timeC += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+
+	//Perform WorkloadD
+	gettimeofday(&start, NULL);
+	WorkloadD();
+	gettimeofday(&end, NULL);
+	timeD += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+/*
+	//Perform WorkloadE
+	gettimeofday(&start, NULL);
+	WorkloadE();
+	gettimeofday(&end, NULL);
+	timeE += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+
+	//Perform WorkloadF
+	gettimeofday(&start, NULL);
+	WorkloadF();
+	gettimeofday(&end, NULL);
+	timeF += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
+
+
+*/
+	}
+
+timeA = timeA/100;
+timeB = timeB/100;
+timeC = timeC/100;
+timeD = timeD/100;
+/*
+timeE = timeE/100;
+timeF = timeF/100;
+*/
+printf("Workload A took: %d microseconds\n", timeA);
+printf("Workload B took: %d microseconds\n", timeB);
+printf("Workload C took: %d microseconds\n", timeC);
+printf("Workload D took: %d microseconds\n", timeD);
+/*
+printf("Workload E took: %d microseconds\n", timeE);
+printf("Workload F took: %d microseconds\n", timeF);
+*/
+
 return 0;
+
+
 }
 
-float workload_time()
-{
-	clock_t start = clock(), diff;
-	//Call workload
-	diff = clock() - start;
-	
-	int msec = diff * 1000 / CLOCKS_PER_SEC;	
-}
 
 //Malloc 150 bytes, and then free them immediately.
 void workloadA()
@@ -87,7 +149,7 @@ void workloadB()
 			free(testVar[index2]);
 		}
 	}
-	printf("index 2 in B %d\n", index2);
+	//printf("index 2 in B %d\n", index2);
 }
 	
 void workloadC()
@@ -126,7 +188,7 @@ void workloadC()
 		else 
 		j =1;
 	  }
-	printf("mallocs in CCC %d\t frees %d\n",mymallocs,frees);
+	//printf("mallocs in CCC %d\t frees %d\n",mymallocs,frees);
 }
 
 void workloadD()
@@ -169,11 +231,11 @@ void workloadD()
 		else 
 		i =1;
 	  }
-	   printf("mallocs in DDD %d\t frees %d\n",mymallocs,frees);
+	   //printf("mallocs in DDD %d\t frees %d\n",mymallocs,frees);
 }		
 
 
-void workloadE(){
+/*void workloadE(){
    int mallocs=0;
    int memoryAllocated =0;
    int memoryLeft = 4096;
@@ -232,4 +294,5 @@ void workloadF(){
    }
    printf("mallocs in FFF %d\t frees %d\n",frees);
 }
+*/
 
