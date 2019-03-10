@@ -115,18 +115,17 @@ void combineFreeSpace(){
   Metadata* currentNode;
   currentNode=head;
   nextNode = head->next;
-  while (nextNode !=NULL){
+  while ( nextNode!=NULL){
     if(currentNode ->free =='t' && nextNode->free =='t'){
-    //printf("I was able to combine free space here\n");
      while (nextNode ->free =='t'&& nextNode !=NULL){
         currentNode ->blockSize = currentNode ->blockSize + nextNode->blockSize + sizeof(Metadata);
         currentNode -> next = nextNode->next;
         nextNode = nextNode->next;
+        if (nextNode == NULL)
+        return;
      }//end of inner while
-     if (nextNode == NULL)
-        break;
+
    }
-   
   nextNode = nextNode->next;
   currentNode =currentNode->next;
  }//end of while loop
