@@ -1,7 +1,7 @@
 Workload E: 
 
-the program pick random numbers between 1 and 10 and malloc those numbers. it does that until there is no more space to allocate space. Once the memory is full, it disallocate allocated memory backward. The last allocation is the firs to be freed. We included this test case because prior to that test case we are not sure if we have allocated memory until we do not have enough space to allocate more. Also up until that test the way we free memory was first in first out. so we wanted to see what would happen if we go the other way arround.
+The program picks random numbers between 1 and 10 and malloc those numbers. It does that until there is no more space to allocate space. Once the memory is full, it disallocate allocated memory backward. The last allocation is the firs to be freed. We included this test case because prior to that test case we are not sure if we have allocated memory until we do not have enough space to allocate more. Also up until that test the way we free memory was first in first out. We wanted to see what would happen if we go the other way around.
 
 Workload F:
 
-We allocates 15 char pointers successively. Once we allocate those pointers, we free them randomly until we free them all. We included this testcase because we wanted to see how would our myfree would behave if we free memory randomly. Particularily, how will our space combination function would behave trying to combine non consecutive space.
+We allocated 15 char pointers successively. Once we allocate those pointers, we free them randomly until we free them all. We included this testcase because we wanted to see how would our myfree would behave if we free memory randomly. Particularily, how will our space combination function would behave trying to combine non consecutive space.
