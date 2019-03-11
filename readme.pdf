@@ -2,22 +2,24 @@ Authors:
 Youssouf Ouedraogo -> net id: yo94
 Michael Mlot-> net id: mfm184
 CS214 - Asst1 - Readme
+
 Design:
+
 In this assignment we were tasked with implementing our own versions of our system’s
 malloc() and free() functions that provide the user basic functionality and handled basic error
 handling.
 
-mymalloc.h: in this header file we have defitions and declaration. I replaced the usual malloc() and free() with our mymalloc() and myfree(). I have function declarations such as mymalloc(), myfree(), nodeCreator(), and combineFreeSpace(). We also have our struct metadata which will hold our medatadata. Finally, the static variable is the our memory block.
+Mymalloc.h: in this header file we have defitions and declaration. I replaced the usual malloc() and free() with  mymalloc() and myfree(). I have function declarations such as mymalloc(), myfree(), nodeCreator(), and combineFreeSpace(). We also have our struct metadata which will hold our medatadata. Finally, the static variable is the our memory block.
 
 Mymalloc.c - Provides to us the new malloc and free functions. 
 
-   For our mymalloc, when the user requests memory, we will first check to see it is not less than 0. if it is not less 0, we check to see if the number of byte the user is asking for is not greater than the amount of byte our memory can contain. if it greater, we just return NULL and get out of the function. 
+   	-For our mymalloc, when the user requests memory, we will first check to see it is not less than 0. If it is not less 0, we check to see if the number of byte the user is asking for is not greater than the amount of byte our memory can contain. If it greater, we just return NULL and get out of the function. 
 
-	if it the resquested memory is not greater, we check to see if it the first time that we allocate memory. if it is the first time and the number of bytes the user asks for is the as our total memory, we just give the user the entire memory. If it is the first time and the user asks for lesser bytes than  the total amount of byte that we have, we split the block of memory give the user what they asked for and leave the rest for future use. We also subtract the remaining memory by sizeof of our metadata for space that our metadata takes in the given memory. Before returning the requested memory to the user, we set that block to a used status so that th the user does not try to use the same block more than once. 
+	-If it the resquested memory is not greater, we check to see if it the first time that we allocate memory. If it is the first time and the number of bytes the user asks for is equal to our total memory, we just give the user the entire memory. If it is the first time and the user asks for lesser bytes than  the total amount of bytes that we have, we split the block of memory give the user what they asked for and leave the rest for future use. We also subtract the remaining memory by sizeof of our metadata for space that our metadata takes in the given memory. Before returning the requested memory to the user, we set that block to a used status so that th the user does not try to use the same block more than once. 
 	
-	if the resquested memory plus the sizeof our metadata is not greater than the amount of memory that we have, and it is not the first time that they use malloc, we will loop through the block untill the see a block capable of holding the requested memory. Once we find a block the same principe of spliting or handing the entire block apply here as well.
+	-If the resquested memory plus the sizeof our metadata is not greater than the amount of memory that we have, and it is not the first time that they use malloc, we will loop through the block untill the see a block capable of holding the requested memory. Once we find a block the same principe of spliting or handing the entire block apply here as well.
 
-   for our myfree, when we receive the memory the user is trying to free, the check to see if they have used at least a malloc. If so, check to see if the address is within the range of our memory. If that is the case we will go through our blocks if we find the memory the user is asking for, we the check to see if the address was not previously freed if not we set its usage status to free and combine consecutive spaces if there are some. if any of the cited conditions is not met, an error message will be printed and tell the user what they did wrong. To combine the spaces, we look for a consecutive space. If we find one, we combine them and keep looping until we come accross a non-free block or we went through the entire blocks.
+ 	-For our myfree, when we receive the memory the user is trying to free, the check to see if they have used at least a malloc. If so, check to see if the address is within the range of our memory. If that is the case we will go through our blocks if we find the memory the user is asking for, we the check to see if the address was not previously freed if not we set its usage status to free and combine consecutive spaces if there are some. If any of the cited conditions is not met, an error message will be printed and tell the user what they did wrong. To combine the spaces, we look for a consecutive space. If we find one, we combine them and keep looping until we come accross a non-free block or we went through the entire blocks.
  
 
 
