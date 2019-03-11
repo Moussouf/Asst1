@@ -216,8 +216,8 @@ void workloadE(){
 
 void workloadF(){
 //declaration of variables
-  int freedPosition[5];
-  char * testVar[5];
+  int freedPosition[15];
+  char * testVar[15];
   int frees = 0;
   int index;
   int i;
@@ -225,12 +225,12 @@ void workloadF(){
   int j;
   int x;
   
-  for (index=0; index<5; index++){
+  for (index=0; index<15; index++){
       frees = 0;
-      for (i=0; i<5; i++)
+      for (i=0; i<15; i++)
       freedPosition[i]=-1;//sets all values in array to be -1
  
-     for (j=0; j<5; j++){
+     for (j=0; j<15; j++){
        testVar[j] = (char*)malloc(sizeof(char));
        if (testVar ==NULL){//checks to make sure that malloc did not return null
          fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
@@ -239,9 +239,9 @@ void workloadF(){
        
      }
    
-     while (frees < 5){
-        random = rand()%5;
-        for (x =0 ; x <5;x++){//checks to see if any given position has already been freed
+     while (frees < 15){
+        random = rand()%15;
+        for (x =0 ; x <15;x++){//checks to see if any given position has already been freed
            if (random == freedPosition[x]){
               j =-1;
               break;
