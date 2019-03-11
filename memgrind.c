@@ -4,7 +4,13 @@
 #include <stddef.h>
 #include <time.h>
 
-int i;
+
+int timeOFA;
+int timeOFB;
+int timeOFC;
+int timeOFD;
+int timeOFE;
+int timeOFF;
 
 void workloadA();
 void workloadB();
@@ -15,87 +21,24 @@ void workloadF();
 
 int main ()
 {
-	unsigned int timeA = 0;
-	unsigned int timeB = 0;
-	unsigned int timeC = 0;
-	unsigned int timeD = 0;
-	unsigned int timeE = 0;
-	unsigned int timeF = 0;
-
-	struct timeval start;
-	struct timeval end;
-	struct timeval time;
-
-	gettimeofday(&time,NULL);
-	suseconds_t systime = time.tv_usec;
-
-	for (i = 0; i < 100; i++)
-	{
-		gettimeofday(&start, NULL);
-		workloadA();
-		gettimeofday(&end, NULL);
-		timeA += (end.tv_usec - start.tv_usec);// * CLOCKS_PER_SEC;
-
-		gettimeofday(&start, NULL);
-		workloadB();
-		gettimeofday(&end, NULL);
-		timeB += (end.tv_usec - start.tv_usec);// * CLOCKS_PER_SEC;
-		
-		gettimeofday(&start, NULL);
-		workloadC();
-		gettimeofday(&end, NULL);
-		timeC += (end.tv_usec - start.tv_usec);// * CLOCKS_PER_SEC;
-/*	
-		gettimeofday(&start, NULL);
-		workloadD();
-		gettimeofday(&end, NULL);
-		timeD += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
-*/
-		gettimeofday(&start, NULL);
-		workloadE();
-		gettimeofday(&end, NULL);
-		timeE += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
-	
-		gettimeofday(&start, NULL);
-		workloadF();
-		gettimeofday(&end, NULL);
-		timeF += (end.tv_usec - start.tv_usec) * CLOCKS_PER_SEC;
-		
-		}
-		
-		timeA /= 100;
-		timeB /= 100;
-		timeC /= 100;
-		//timeD /= 100;
-		timeE = timeE/100;
-		timeF = timeF/100;
-	
-		printf("Workload A took %d microseconds\n", timeA);
-		printf("Workload B took %d microseconds\n", timeB);
-		printf("Workload C took %d microseconds\n", timeC);
-		//printf("Workload D took %d microseconds\n", timeD);
-		printf("Workload E took %d microseconds\n", timeE);
-		printf("Workload F took %d microseconds\n", timeF);
-
-
-/*	
-  srand(time(0));
-  printf("executing work loads\n");
+  srand(time(0)); 
   workloadA();
-  printf("End of work load A\n");
   workloadB();
-  printf("End of work load B\n");
   workloadC();
-  printf("End of work load C\n");
   workloadD();
-  printf("End of work load D\n");
-  workloadE();
-  printf("End of work load E\n");
-  //workloadF();
-  printf("End of work load F\n");*/
+  workloadE(); 
+  workloadF();
 return 0;
 }
 
+float workload_time()
+{
+	clock_t start = clock(), diff;
+	//Call workload
+	diff = clock() - start;
+	
+	int msec = diff * 1000 / CLOCKS_PER_SEC;	
+}
 
 //Malloc 150 bytes, and then free them immediately.
 void workloadA()
@@ -105,14 +48,14 @@ void workloadA()
 
 	for(index = 0; index< 150; index++)
 	{	
-		testVar = (char*)malloc(sizeof(char));
-                if (testVar ==NULL){
+		testVar = (char*)malloc(sizeof(char));// malloc one byte
+
+                if (testVar ==NULL){ //checks to make sure that malloc did not return null
                   fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
                   return;
                 }
-		free(testVar);
+		free(testVar);//frees the one byte allocated
 	}
-	//printf("index %d\n",index);
 }
 
 void workloadB()
@@ -124,20 +67,19 @@ void workloadB()
 
 	for(j = 0; j < 3; j++)
 	{
-		for(index1 = 0; index1 < 50; index1++)
+		for(index1 = 0; index1 < 50; index1++)// allocates one byte at a time until it has 50 bytes allocated
 		{
-			testVar[index1] = (char*)malloc(sizeof(char));
-			if (testVar[index1] ==NULL){
+			testVar[index1] = (char*)malloc(sizeof(char)); 
+			if (testVar[index1] ==NULL){//checks to make sure that malloc did not return null
                           fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
                           return;
                        }
 		}
-		for(index2 = 0; index2< 50; index2++)
+		for(index2 = 0; index2< 50; index2++)//frees the 50th previous allocation
 		{
 			free(testVar[index2]);
 		}
 	}
-	//printf("index 2 in B %d\n", index2);
 }
 	
 void workloadC()
@@ -151,14 +93,22 @@ void workloadC()
 	
         
 	while (j !=1){
-	        random= rand();
-	        if (frees == mymallocs && mymallocs <50){
+	        random= rand();//pick a random number
+	        if (frees == mymallocs && mymallocs <50){// if we have the same number of mallocs and frees and we have not reach 50 mallocs, just malloc 
 	            array[mymallocs] = malloc(1);
+	            if (array ==NULL){
+                      fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
+                      return;
+                    }
 		    mymallocs++;
 	        }
 	        else if(frees < mymallocs && mymallocs <50){
-		  if (random % 2 == 1){
+		  if (random % 2 == 1){  // if the random number picked at the begining of the while loop is odd, malloc else free
 		      array[mymallocs] = malloc(1);
+		      if (array ==NULL){
+                         fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
+                         return;
+                      }
 		      mymallocs++;
 		  }
 		  
@@ -168,7 +118,7 @@ void workloadC()
 		   frees++;
 		  }
 		 }
-		else if (frees < mymallocs && mymallocs==50){
+		else if (frees < mymallocs && mymallocs==50){ //once it mallocs 50 times just free the rest. do not malloc anymore
 		   free(array[frees]);
 		   frees++;
 		}
@@ -176,7 +126,6 @@ void workloadC()
 		else 
 		j =1;
 	  }
-	//printf("mallocs in CCC %d\t frees %d\n",mymallocs,frees);
 }
 
 void workloadD()
@@ -229,81 +178,46 @@ void workloadD()
 		
 		else 
 		i =1;
-	}
-}
-/*
-void workloadD()
-{	
-	//int max_size = 10; // Not needed?
-	char* array[50];
-	int mymallocs=0; //# of mymallocs
-	int frees=0; //# of frees
-	int i=0;
-	int random=0;
-	int mallocRand=0;
-	
-	
-	
-		while (i !=1){
-	        random= rand();
-	        if (frees == mymallocs && mymallocs <50){
-	            mallocRand = rand()%64+1;
-	            array[mymallocs] = (char*)malloc(sizeof (char)*mallocRand);
-		    mymallocs++;
-	        }
-	        else if(frees < mymallocs && mymallocs <50){
-		   if (random %2 == 1){
-		        mallocRand = rand()%64+1;
-		        array[mymallocs] = malloc(sizeof(char)*mallocRand);
-		        mymallocs++;
-		    }
-		  
-		  else 
-		   {
-		     free(array[frees]);
-		     frees++;
-		   }
-		 }
-		else if (frees < mymallocs && mymallocs==50){
-		   free(array[frees]);
-		   frees++;
-		}
-		
-		else 
-		i =1;
 	  }
-	  // printf("mallocs in DDD %d\t frees %d\n",mymallocs,frees);
 }		
 
-*/
+
 void workloadE(){
    int mallocs=0;
    int memoryAllocated =0;
    int memoryLeft = 4096;
    int random;
    char *testVar[170];
-   random = rand()%10+1;
-   memoryAllocated = memoryAllocated + random + sizeof(Metadata);
-   memoryAllocated =memoryAllocated -random - sizeof (Metadata);
-   while (memoryAllocated < memoryLeft){
+   random = rand()%10+1;//pick random number between 1 and 10
+   //memoryAllocated = memoryAllocated + random + sizeof(Metadata); //increment memory allocated by memory allocated and sizeof of metadata
+   //memoryAllocated =memoryAllocated -random - sizeof (Metadata);//substract memory left from the memory allocated and sizeof of metadata
+   
+   
+   while (memoryAllocated < memoryLeft){// keep looping to until we do not have enough space to allocate something.
       testVar[mallocs] = malloc(sizeof(char)*random);
+      
+      if (testVar ==NULL){//checks to make sure that malloc did not return null
+         fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
+         return;
+     }
       mallocs = mallocs +1;
-      random = rand()%10+1;
+      
       memoryAllocated = memoryAllocated + random + sizeof(Metadata);
-      memoryAllocated =memoryAllocated -random - sizeof (Metadata);
+      memoryLeft =memoryAllocated -random - sizeof (Metadata);//substract memory left from the memory allocated and sizeof of metadata
+      random = rand()%10+1;
    }
    mallocs=mallocs -1;
-   while (mallocs >=0){
+   while (mallocs >=0){//frees allocted memory backward from the one that was lastly allocated to the one that was first allocated
       free(testVar[mallocs]);
       mallocs = mallocs-1;
    }
-
- printf("mallocs in EEE %d \n",mallocs);
+   
 }
 
 void workloadF(){
-  int freedPosition[15];
-  char * testVar[15];
+//declaration of variables
+  int freedPosition[5];
+  char * testVar[5];
   int frees = 0;
   int index;
   int i;
@@ -313,26 +227,36 @@ void workloadF(){
   
   for (index=0; index<5; index++){
       frees = 0;
-      for (i=0; i<15; i++)
-      freedPosition[i]=0;
+      for (i=0; i<5; i++)
+      freedPosition[i]=-1;//sets all values in array to be -1
  
-     for (j=0; j<15; j++){
+     for (j=0; j<5; j++){
        testVar[j] = (char*)malloc(sizeof(char));
+       if (testVar ==NULL){//checks to make sure that malloc did not return null
+         fprintf(stderr, "Error malloc return null in %s at line %d\n", __FILE__, __LINE__);
+         return;
+     }
+       
      }
    
-     while (frees < 15){
-        random = rand()%15;
-        for (x =0 ; x <15;x++){
-           if (random = freedPosition[i]);
-              x =-1;
+     while (frees < 5){
+        random = rand()%5;
+        for (x =0 ; x <5;x++){//checks to see if any given position has already been freed
+           if (random == freedPosition[x]){
+              j =-1;
               break;
+              }
+              else 
+              j =0;
        }
-        if (x !=-1){
+        if (j !=-1){//if the position was not freed, free it
            free(testVar[random]);
+           freedPosition[frees] = random;//sets 
            frees = frees +1;
+           
         }
+        
      }
    }
-   printf("mallocs in FFF %d\t frees %d\n",frees);
 }
 
