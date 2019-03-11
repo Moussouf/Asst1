@@ -31,11 +31,11 @@ jobs.
 
 Workload Data:
 
-"Workload A took 3 microseconds."
-"Workload B took 30 microseconds."
-"Workload C took C microseconds."
-"Workload D took 499 microseconds."
+"Workload A took 5 microseconds."
+"Workload B took 38 microseconds."
+"Workload C took 8 microseconds."
+"Workload D took 539 microseconds."
 "Workload E took 0 microseconds."
-"Workload F took 55 microseconds."
+"Workload F took 74 microseconds."
 
 Unforunately, our workloadD and workloadE don't handle memory correctly as the system tries multiple times to free memory that was not dynamically allocated by our memgrind.c at line 220. WorkloadD and workloadE both result in multiple lines of warnings from mymalloc.c.
