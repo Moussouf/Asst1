@@ -30,3 +30,6 @@ completion time of each is printed out, representing how long it took our system
 jobs.
 
 Workload Data:
+
+Workload A took 5 microseconds
+Workload B took 
